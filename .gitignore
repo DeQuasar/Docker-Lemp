@@ -1,7 +1,9 @@
 # PHP Storm .idea files
+.idea/*
 .idea/inspectionProfiles/
 .idea/modules.xml
 .idea/php.xml
 .idea/vcs.xml
 .idea/webResources.xml
 .idea/workspace.xml
+.idea/dictionaries
