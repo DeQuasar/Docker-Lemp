@@ -20,13 +20,13 @@ Usage Instructions
 
 All commands will be executed in the **folder** where the **docker-compose.yml** is located
 
-####Start the server
+###Start the server
 > docker-compose up -d
 
-####Stop the server
+###Stop the server
 > docker-compose down
 
-####Kill the containers
+###Kill the containers
 > docker-compose kill
 
 TODO
