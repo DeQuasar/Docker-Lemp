@@ -1,0 +1,49 @@
+version: "2"
+services:
+
+# Nginx Service
+  nginx:
+    image: nginx
+    restart: always
+    container_name: Nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./public:/public # Public Folder holds the Web Application files
+      - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/nginx.conf # Nginx Application Config File
+      - ./docker/nginx/logs/access.log:/var/log/nginx/access.log # Access Log
+      - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
+    links:
+      - php
+      - phpmyadmin
+
+  # PHP Service - PHP-FPM 7.1
+  php:
+    image: php:7.1-fpm
+    container_name: PHP-FPM7.1
+    volumes:
+      - ./public:/public # Public Folder holds the Web Application files for PHP-FPM access
+
+  # PHPMyAdmin Service
+  # Login - User: "root" password: "root"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    container_name: PHPMyAdmin
+    ports:
+      - 8080:80
+    links:
+      - mariadb
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: mariadb
+
+  # MariaDB
+  mariadb:
+    image: mariadb
+    restart: always
+    container_name: MariaDB
+    environment:
+      MYSQL_ROOT_PASSWORD: root
