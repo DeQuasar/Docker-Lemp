@@ -15,6 +15,31 @@ Folder Structure
         - **Conf** - PHP configuration files        
 - **Public** - Application web root 
 
+Services
+------
+> Nginx - PHP7.1 - MariaDB - PHPMyAdmin
+
+* Nginx
+    * Address - Localhost or Hostfile equivalent
+    * Ports - 80 and 443
+* PHP
+    * Version 7.1
+* MySQL
+    * Address - Localhost
+    * Ports - 3306
+    * Environment Variables
+        * Root Password - root 
+* PHPMyAdmin
+    * Address - Localhost:8080
+    * Ports - 8080
+        * Environment Variables
+            * Host - mariadb
+            * Username - root
+            * password - root
+    
+
+
+
 Usage Instructions
 ------
 
