@@ -10,7 +10,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./public:/public # Public Folder holds the Web Application files
+      - ./www:/www # Public Folder holds the Web Application files
       - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/nginx.conf # Nginx Application Config File
       - ./docker/nginx/logs/access.log:/var/log/nginx/access.log # Access Log
       - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
@@ -23,7 +23,7 @@ services:
     image: php:7.1-fpm
     container_name: PHP-FPM7.1
     volumes:
-      - ./public:/public # Public Folder holds the Web Application files for PHP-FPM access
+      - ./www:/www # Public Folder holds the Web Application files for PHP-FPM access
 
   # PHPMyAdmin Service
   # Login - User: "root" password: "root"
