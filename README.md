@@ -43,6 +43,9 @@ Services
 Usage Instructions
 ------
 
+> First make sure that your host file and configuration file points your.local domain to 127.0.0.1:80 or the corresponding
+container IP Address
+
 All commands will be executed in the **folder** where the **docker-compose.yml** is located
 
 #### Start the server
