@@ -16,14 +16,18 @@ services:
       - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
     links:
       - php
-      - phpmyadmin
+      - mariadb
 
   # PHP Service - PHP-FPM 7.1
   php:
-    image: php:7.1-fpm
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
     container_name: PHP-FPM7.1
     volumes:
       - ./www:/www # Public Folder holds the Web Application files for PHP-FPM access
+    links:
+      - mariadb
 
   # PHPMyAdmin Service
   # Login - User: "root" password: "root"
@@ -33,12 +37,13 @@ services:
     container_name: PHPMyAdmin
     ports:
       - 8080:80
-    links:
-      - mariadb
     environment:
       MYSQL_USERNAME: root
       MYSQL_ROOT_PASSWORD: root
       PMA_HOST: mariadb
+      PMA_PORT: 3306
+    links:
+      - mariadb
 
   # MariaDB
   mariadb:
@@ -47,3 +52,7 @@ services:
     container_name: MariaDB
     environment:
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+     - /opt/mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
