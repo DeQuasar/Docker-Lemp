@@ -48,6 +48,9 @@ container IP Address
 
 All commands will be executed in the **folder** where the **docker-compose.yml** is located
 
+#### Build the server first
+> docker-compose build
+
 #### Start the server
 > docker-compose up -d
 
