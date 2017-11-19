@@ -6,56 +6,60 @@ services:
     image: nginx
     restart: always
     container_name: Nginx
-    ports:
-      - 80:80
-      - 443:443
     volumes:
       - ./www:/www # Public Folder holds the Web Application files
       - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/nginx.conf # Nginx Application Config File
       - ./docker/nginx/logs/access.log:/var/log/nginx/access.log # Access Log
       - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
+    ports:
+      - 80:80
+      - 443:443
     links:
       - php
-      - mariadb
 
   # PHP Service - PHP-FPM 7.1
   php:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+    restart: always
     container_name: PHP-FPM7.1
     volumes:
       - ./www:/www # Public Folder holds the Web Application files for PHP-FPM access
+      - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    expose:
+      - "9000"
     links:
-      - mariadb
-
-  # PHPMyAdmin Service
-  # Login - User: "root" password: "root"
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    container_name: PHPMyAdmin
-    ports:
-      - 8080:80
-    environment:
-      MYSQL_USERNAME: root
-      MYSQL_ROOT_PASSWORD: root
-      PMA_HOST: mariadb
-      PMA_PORT: 3306
-    links:
-      - mariadb
+      - database
 
   # MariaDB
-  mariadb:
+  database:
     image: mariadb
     restart: always
-    container_name: MariaDB
+    container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     volumes:
-     - mysql-data:/var/lib/mysql
+      - database-data:/var/lib/mysql
+      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
     ports:
-      - 3306:3306
+      - "8989:3006"
+
+  # PhpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    links:
+      - database
 
 volumes:
-  mysql-data:
+  database-data:
+    driver: local
