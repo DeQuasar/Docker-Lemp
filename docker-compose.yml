@@ -7,7 +7,7 @@ services:
     restart: always
     container_name: Nginx
     volumes:
-      - ./www:/www # Public Folder holds the Web Application files
+      - ./www:/var/www/html # Public Folder holds the Web Application files
       - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/nginx.conf # Nginx Application Config File
       - ./docker/nginx/logs/access.log:/var/log/nginx/access.log # Access Log
       - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
@@ -25,7 +25,7 @@ services:
     restart: always
     container_name: PHP-FPM7.1
     volumes:
-      - ./www:/www # Public Folder holds the Web Application files for PHP-FPM access
+      - ./www:/var/www/html # Public Folder holds the Web Application files for PHP-FPM access
       - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
     expose:
       - "9000"
