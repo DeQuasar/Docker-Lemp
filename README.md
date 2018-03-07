@@ -13,7 +13,7 @@ Folder Structure
             - **Error.log** - Nginx error log
     - **PHP**
         - **Conf** - PHP configuration files        
-- **Www** - Application web root 
+- **www** - Application web root 
 
 Services
 ------
