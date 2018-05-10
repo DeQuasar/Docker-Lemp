@@ -1,4 +1,4 @@
-version: 3
+version: "3"
 services:
 
 # Nginx Service
@@ -48,7 +48,7 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - database-data:/var/lib/mysql
-      - ./docker/mysql/conf/custom.cnf:/etc/mysql/conf.d
+      - ./docker/mysql/conf:/etc/mysql/conf.d
     ports:
       - 3306
 
@@ -65,10 +65,11 @@ services:
     links:
       - database
 
-    redis:
-      image: redis
-      ports:
-        - 6379
+  redis:
+    image: redis
+    ports:
+      - 6379
+
 volumes:
   database-data:
     driver: local
