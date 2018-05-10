@@ -1,4 +1,4 @@
-version: "2"
+version: 3
 services:
 
 # Nginx Service
@@ -28,9 +28,14 @@ services:
       - ./www:/var/www/html # Public Folder holds the Web Application files for PHP-FPM access
       - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
     expose:
-      - "9000"
+      - 9000
     links:
       - database
+      - redis
+    environment:
+      REDIS_HOST: redis
+      SESSION_DRIVER: redis
+      CACHE_DRIVER: redis
 
   # MariaDB
   database:
@@ -43,9 +48,9 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - database-data:/var/lib/mysql
-      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/conf/custom.cnf:/etc/mysql/conf.d
     ports:
-      - "8989:3006"
+      - 3306
 
   # PhpMyAdmin
   phpmyadmin:
@@ -56,10 +61,14 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "8080:80"
+      - 8080:80
     links:
       - database
 
+    redis:
+      image: redis
+      ports:
+        - 6379
 volumes:
   database-data:
     driver: local
