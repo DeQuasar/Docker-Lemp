@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
 
 # Nginx Service
@@ -8,7 +8,7 @@ services:
     container_name: Nginx
     volumes:
       - ./www:/var/www/html # Public Folder holds the Web Application files
-      - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/nginx.conf # Nginx Application Config File
+      - ./docker/nginx/conf/nginx.conf:/etc/nginx/conf.d/default.conf # Nginx Application Config File
       - ./docker/nginx/logs/access.log:/var/log/nginx/access.log # Access Log
       - ./docker/nginx/logs/error.log:/var/log/nginx/error.log # Error Log
     ports:
@@ -29,13 +29,13 @@ services:
       - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
     expose:
       - 9000
-    links:
-      - database
-      - redis
     environment:
       REDIS_HOST: redis
       SESSION_DRIVER: redis
       CACHE_DRIVER: redis
+    links:
+      - database
+      - redis
 
   # MariaDB
   database:
@@ -51,10 +51,13 @@ services:
       - ./docker/mysql/conf:/etc/mysql/conf.d
     ports:
       - 3306
+    links:
+      - phpmyadmin
 
   # PhpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     environment:
       PMA_HOST: database
       MYSQL_USER: user
@@ -62,14 +65,17 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 8080:80
-    links:
-      - database
 
   redis:
-    image: redis
-    ports:
-      - 6379
+      image: redis
+      container_name: redis
+      hostname: redis
+      ports:
+        - 16379:6379
+      volumes:
+        - redis-data:/data
 
 volumes:
   database-data:
     driver: local
+  redis-data:
